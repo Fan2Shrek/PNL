@@ -4,8 +4,12 @@ namespace Pnl\Runtime\Resolver;
 
 class BaseResolver implements ResolverInterface
 {
-    public function resolve(mixed $className): object
+    public function __construct(private \Closure $closure, private array $args = [])
     {
-        return new $className();
+    }
+
+    public function resolve(): array
+    {
+        return [$this->closure, $this->args];
     }
 }

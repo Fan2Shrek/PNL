@@ -17,18 +17,18 @@ class Application
 
     private bool $isBooted = false;
 
-    public function __construct(private ClassLoader $classLoader)
+    public function __construct(private ClassLoader $classLoader, private array $context = [])
     {
         $this->classAdapter = new ClassAdapter();
     }
 
-    private function boot() : void
+    private function boot(): void
     {
         if ($this->isBooted) {
             return;
         }
 
-        if (null === $this->composerContext){
+        if (null === $this->composerContext) {
             $this->loadComposerContext();
         }
 
@@ -54,7 +54,7 @@ class Application
     public function run(): void
     {
         $this->boot();
-        dd($this);
+
         return;
     }
 }

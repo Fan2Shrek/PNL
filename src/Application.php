@@ -15,11 +15,15 @@ class Application
 
     private ?ComposerContext $composerContext = null;
 
+    private array $argv = [];
+
     private bool $isBooted = false;
 
-    public function __construct(private ClassLoader $classLoader, private array $context = [])
+    public function __construct(private ClassLoader $classLoader, array $argv = [])
     {
         $this->classAdapter = new ClassAdapter();
+        unset($argv[0]);
+        $this->argv = $argv;
     }
 
     private function boot(): void
@@ -54,6 +58,7 @@ class Application
     public function run(): void
     {
         $this->boot();
+        dd($this->argv);
 
         return;
     }

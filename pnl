@@ -15,4 +15,4 @@ require_once 'runtime.php';
 // $app = new Application($classLoader);
 // $app->run();
 
-return fn (ClassLoader $classLoader, array $context) => new Application($classLoader, $context);
+return fn (ClassLoader $classLoader, array $context) => new Application($classLoader, $context['argv']);

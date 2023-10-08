@@ -6,13 +6,4 @@ use Pnl\Application;
 
 require_once 'runtime.php';
 
-// ini_set('display_errors', 1);
-// ini_set('display_startup_errors', 1);
-// error_reporting(E_ALL);
-
-// $classLoader = require 'vendor/autoload.php';
-
-// $app = new Application($classLoader);
-// $app->run();
-
 return fn (ClassLoader $classLoader, array $context) => new Application($classLoader, $context['argv']);

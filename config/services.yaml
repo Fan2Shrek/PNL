@@ -1,0 +1,9 @@
+services:
+    _defaults:
+        autowire: true     
+        autoconfigure: true
+
+    Pnl\:
+        resource: '../src/'
+        exclude:
+            - '../src/Application.php'

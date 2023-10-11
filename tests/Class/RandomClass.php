@@ -10,7 +10,7 @@ class RandomClass
 
     private readonly int $prix;
 
-    public function sexe(): string
+    public function test(): string
     {
         return $this->banane . ' ' . $this->type . ' ' . $this->prix;
     }

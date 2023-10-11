@@ -3,6 +3,7 @@
 namespace Pnl\App\Command;
 
 use Pnl\App\AbstractCommand;
+use Pnl\Console\Input\ArgumentBag;
 
 class HelloCommand extends AbstractCommand
 {

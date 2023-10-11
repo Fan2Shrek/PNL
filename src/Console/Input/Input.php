@@ -4,6 +4,7 @@ namespace Pnl\Console\Input;
 
 class Input implements InputInterface
 {
+    /** @var array<string mixed>> */
     private array $argumentsList = [];
 
     public function __construct(array $args = [])

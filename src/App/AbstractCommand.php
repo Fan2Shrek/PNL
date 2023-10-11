@@ -2,9 +2,16 @@
 
 namespace Pnl\App;
 
+use Pnl\Console\Input\ArgumentBag;
+
 abstract class AbstractCommand implements CommandInterface
 {
     private const NAME = '';
+
+    public static function getArguments(): ArgumentBag
+    {
+        return new ArgumentBag();
+    }
 
     public function getName(): string
     {

@@ -20,20 +20,19 @@ class Application
 
     private ?ComposerContext $composerContext = null;
 
-    private array $argv = [];
+    private array $context = [];
 
     private bool $isBooted = false;
 
     private array $commandList = [];
 
-    public function __construct(private ClassLoader $classLoader, array $argv = [])
+    public function __construct(private ClassLoader $classLoader, array $context = [])
     {
         $this->classAdapter = new ClassAdapter();
-        unset($argv[0]);
-        $this->argv = $argv;
+        $this->context = $context;
     }
 
-    public function run(): void
+    public function run(array $args = []): void
     {
         $this->boot();
 
@@ -41,7 +40,15 @@ class Application
             throw new \Exception('No commands found');
         }
 
-        dd($this->commandList);
+        if (empty($args)) {
+            return;
+        }
+
+        if ($this->hasCommandName($args[0])) {
+            $command = $this->getCommand($args[0]);
+            array_shift($args);
+            $command($args);
+        }
 
         return;
     }
@@ -91,10 +98,19 @@ class Application
         return true;
     }
 
+    private function hasCommandName(string $commandName): bool
+    {
+        return array_key_exists($commandName, $this->commandList);
+    }
+
+    private function getCommand(string $commandName): CommandInterface
+    {
+        return $this->commandList[$commandName];
+    }
+
 
     public function addCommand(CommandInterface $command): void
     {
-        dd($command->getName());
         if (!$this->hasCommand($command)) {
             $this->commandList[$command->getName()] = $command;
         }

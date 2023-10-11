@@ -33,7 +33,7 @@ function observDir(string $dirName, string $parent = null): void
                 pclose($pointer);
             }
 
-            $pointer = popen('./pnl', 'r');
+            $pointer = popen('./pnl '. $_SERVER['argv'][0], 'r');
         }
 
         while (!feof($pointer)) {
@@ -43,8 +43,12 @@ function observDir(string $dirName, string $parent = null): void
     }
 }
 
+if (isset($_SERVER['argc']) && $_SERVER['argc'] > 1 ){
+    array_shift($_SERVER['argv']);
+}
+
 $filesMap = [];
-$pointer = popen('./pnl', 'r');
+$pointer = popen('./pnl ' . $_SERVER['argv'][0], 'r');
 
 while (true) {
     sleep(1);

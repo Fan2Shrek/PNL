@@ -10,8 +10,13 @@ class AppRunner implements RunnerInterface
     {
     }
 
-    public function run(): void
+    public function run(?array $args = null): void
     {
-        $this->app->run();
+        if (null === $args){
+            $args = $_SERVER['argv'];
+            array_shift($args);
+        }
+
+        $this->app->run($args);
     }
 }

@@ -2,11 +2,15 @@
 
 namespace Pnl;
 
+use Pnl\Console\Input\Input;
 use Pnl\Service\ClassAdapter;
 use Pnl\Composer\ComposerContext;
 use Composer\Autoload\ClassLoader;
 use Pnl\App\CommandInterface;
 use Pnl\App\DependencyInjection\AddCommandPass;
+use Pnl\Console\Input\InputInterface;
+use Pnl\Console\InputResolver;
+use Pnl\Console\InputResolverInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -14,11 +18,9 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 class Application
 {
-    private ClassAdapter $classAdapter;
+    private Container $container;
 
-    private ?Container $container = null;
-
-    private ?ComposerContext $composerContext = null;
+    private ComposerContext $composerContext;
 
     private array $context = [];
 
@@ -28,7 +30,6 @@ class Application
 
     public function __construct(private ClassLoader $classLoader, array $context = [])
     {
-        $this->classAdapter = new ClassAdapter();
         $this->context = $context;
     }
 
@@ -45,9 +46,9 @@ class Application
         }
 
         if ($this->hasCommandName($args[0])) {
-            $command = $this->getCommand($args[0]);
+            $name = $args[0];
             array_shift($args);
-            $command($args);
+            $this->executeCommand($this->getCommand($name), new Input($args));
         }
 
         return;
@@ -59,11 +60,11 @@ class Application
             return;
         }
 
-        if (null === $this->composerContext) {
+        if (!isset($this->composerContext)) {
             $this->loadComposerContext();
         }
 
-        if (null === $this->container) {
+        if (!isset($this->container)) {
             $this->initializeContainer();
         }
 
@@ -85,6 +86,18 @@ class Application
         $builder->compile();
 
         $this->container = $builder;
+    }
+
+    public function executeCommand(CommandInterface $command, InputInterface $input): void
+    {
+        $args = $this->getInputResolver()->resolve($command, $input);
+
+        $command($args);
+    }
+
+    public function getInputResolver(): InputResolverInterface
+    {
+        return $this->container->get(InputResolver::class);
     }
 
     private function loadComposerContext(): true
@@ -119,10 +132,5 @@ class Application
     public function hasCommand(CommandInterface $command): bool
     {
         return in_array($command->getName(), $this->commandList);
-    }
-
-    public function adaptWorkSpace(): void
-    {
-        $this->classAdapter;
     }
 }

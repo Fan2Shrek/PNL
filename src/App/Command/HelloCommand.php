@@ -4,9 +4,9 @@ namespace Pnl\App\Command;
 
 use Pnl\App\AbstractCommand;
 
-class TestCommand extends AbstractCommand
+class HelloCommand extends AbstractCommand
 {
-    protected const NAME = 'test';
+    protected const NAME = 'hello';
 
     public function getDescription(): string
     {
@@ -15,6 +15,6 @@ class TestCommand extends AbstractCommand
 
     public function __invoke(): void
     {
-        echo 'Test', PHP_EOL;
+        echo 'Hello, world!', PHP_EOL;
     }
 }

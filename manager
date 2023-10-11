@@ -27,13 +27,7 @@ function observDir(string $dirName, string $parent = null): void
         if ($filesMap[$path] !== filemtime($path)) {
             $filesMap[$path] = filemtime($path);
 
-            echo "\033[2J\033[;H";
-
-            if (null !== $pointer) {
-                pclose($pointer);
-            }
-
-            $pointer = popen('./pnl '. $_SERVER['argv'][0], 'r');
+            execPnl();
         }
 
         while (!feof($pointer)) {
@@ -43,12 +37,28 @@ function observDir(string $dirName, string $parent = null): void
     }
 }
 
-if (isset($_SERVER['argc']) && $_SERVER['argc'] > 1 ){
-    array_shift($_SERVER['argv']);
+function execPnl(): void
+{
+    global $pointer;
+
+    echo "\033[2J\033[;H";
+
+    if (isset($_SERVER['argc']) && $_SERVER['argc'] > 1 ){
+        if ($_SERVER['argv'][0] === $_SERVER['SCRIPT_FILENAME']){
+            array_shift($_SERVER['argv']);
+        }
+    }
+
+    if (null !== $pointer) {
+        pclose($pointer);
+    }
+
+    $pointer = popen('./pnl '. join(' ', $_SERVER['argv']), 'r');
 }
 
 $filesMap = [];
-$pointer = popen('./pnl ' . $_SERVER['argv'][0], 'r');
+
+execPnl();
 
 while (true) {
     sleep(1);

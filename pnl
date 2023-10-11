@@ -6,4 +6,4 @@ use Pnl\Application;
 
 require_once 'runtime.php';
 
-return fn (ClassLoader $classLoader, array $context) => new Application($classLoader, $context['argv']);
+return fn (ClassLoader $classLoader, array $context) => new Application($classLoader, $context);

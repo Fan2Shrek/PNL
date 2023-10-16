@@ -14,7 +14,7 @@ class InputResolver implements InputResolverInterface
     {
         foreach ($arguments->getAllArguments() as $name => $value) {
             if (!$this->validateArgument($name, $value, $command::getArguments())) {
-                return FALSE;
+                throw new \LogicException(sprintf('Could not resolve %s argument', $name));
             }
         }
 

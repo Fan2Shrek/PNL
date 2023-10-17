@@ -16,7 +16,6 @@ abstract class AbstractCommand implements CommandInterface
     public function getName(): string
     {
         if (empty(static::NAME)) {
-            dd(static::NAME);
             throw new \Exception(sprintf('Command %s does not have a name :(', static::class));
         }
 

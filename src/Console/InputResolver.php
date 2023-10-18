@@ -12,6 +12,12 @@ class InputResolver implements InputResolverInterface
 {
     public function resolve(CommandInterface $command, InputInterface $arguments): InputInterface
     {
+        foreach ($command::getArguments()->getAllRequire() as $required){
+            if (!$arguments->getAllArguments($required->getName())) {
+                throw new \Exception(sprintf('The %s argument is required', $required->getName()));
+            }
+        }
+
         foreach ($arguments->getAllArguments() as $name => $value) {
             if (!$this->validateArgument($name, $value, $command::getArguments())) {
                 throw new \LogicException(sprintf('Could not resolve %s argument', $name));

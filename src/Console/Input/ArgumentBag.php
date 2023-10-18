@@ -45,4 +45,9 @@ class ArgumentBag
     {
         return new \ArrayIterator($this->arguments);
     }
+
+    public function getAllRequire(): array
+    {
+        return array_filter($this->arguments, fn ($arg) => $arg->isRequired());
+    }
 }

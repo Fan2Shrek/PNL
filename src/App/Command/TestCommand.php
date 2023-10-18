@@ -13,7 +13,7 @@ class TestCommand extends AbstractCommand
     public static function getArguments(): ArgumentBag
     {
         return (new ArgumentBag())
-            ->add('test', TRUE, 'Test argument', ArgumentType::STRING)
+            ->add('john', TRUE, 'Test argument', ArgumentType::STRING)
             ->add('joe', FALSE, 'Test argument 2', ArgumentType::BOOLEAN, TRUE);
     }
 

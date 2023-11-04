@@ -5,6 +5,7 @@ namespace Pnl\App\Command;
 use Pnl\App\AbstractCommand;
 use Pnl\Console\Input\ArgumentBag;
 use Pnl\Console\Input\ArgumentType;
+use Pnl\Console\Input\InputInterface;
 
 class TestCommand extends AbstractCommand
 {
@@ -22,9 +23,8 @@ class TestCommand extends AbstractCommand
         return 'Test command';
     }
 
-    public function __invoke(): void
+    public function __invoke(InputInterface $input): void
     {
-        dd(\func_get_args());
-        echo 'Test', PHP_EOL;
+        echo sprintf('%s de ouf', $input->john), PHP_EOL;
     }
 }

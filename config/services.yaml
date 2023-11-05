@@ -11,6 +11,7 @@ services:
         resource: '../src/Console'
         exclude:
             - '../src/Console/Input'
+            - '../src/Console/Output'
 
     Pnl\Service\:
         resource: '../src/Service'

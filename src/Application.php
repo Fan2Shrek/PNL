@@ -11,6 +11,8 @@ use Pnl\App\DependencyInjection\AddCommandPass;
 use Pnl\Console\Input\InputInterface;
 use Pnl\Console\InputResolver;
 use Pnl\Console\InputResolverInterface;
+use Pnl\Console\Output\OutputInterface;
+use Pnl\Console\Output\ConsoleOutput;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -22,17 +24,25 @@ class Application
 
     private ComposerContext $composerContext;
 
+    /** @phpstan-ignore-next-line */
     private array $context = [];
 
     private bool $isBooted = false;
 
+    /**
+     * @var CommandInterface[]
+     */
     private array $commandList = [];
 
+    /** @phpstan-ignore-next-line */
     public function __construct(private ClassLoader $classLoader, array $context = [])
     {
         $this->context = $context;
     }
 
+    /**
+     * @param string[] $args
+     * */
     public function run(array $args = []): void
     {
         $this->boot();
@@ -92,11 +102,12 @@ class Application
     {
         $args = $this->getInputResolver()->resolve($command, $input);
 
-        $command($args);
+        $command($args, new ConsoleOutput());
     }
 
     public function getInputResolver(): InputResolverInterface
     {
+        /** @phpstan-ignore-next-line */
         return $this->container->get(InputResolver::class);
     }
 

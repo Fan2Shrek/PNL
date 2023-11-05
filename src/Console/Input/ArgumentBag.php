@@ -6,6 +6,9 @@ use Traversable;
 
 class ArgumentBag
 {
+    /**
+     * @var ArgumentDefinition[]
+     */
     private array $arguments = [];
 
     public function addArgument(ArgumentDefinition $arg): static
@@ -36,16 +39,25 @@ class ArgumentBag
         return array_key_exists($name, $this->arguments);
     }
 
+    /**
+     * @return ArgumentDefinition[]
+     */
     public function getAll(): array
     {
         return $this->arguments;
     }
 
+    /**
+     * @return Traversable<ArgumentDefinition>
+     */
     public function getIterator(): Traversable
     {
         return new \ArrayIterator($this->arguments);
     }
 
+    /**
+     * @return ArgumentDefinition[]
+     */
     public function getAllRequire(): array
     {
         return array_filter($this->arguments, fn ($arg) => $arg->isRequired());

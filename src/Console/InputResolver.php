@@ -12,16 +12,14 @@ class InputResolver implements InputResolverInterface
 {
     public function resolve(CommandInterface $command, InputInterface $arguments): InputInterface
     {
-        foreach ($command::getArguments()->getAllRequire() as $required){
-            if (!$arguments->getAllArguments($required->getName())) {
+        foreach ($command::getArguments()->getAllRequire() as $required) {
+            if (!$arguments->getAllArguments()) {
                 throw new \Exception(sprintf('The %s argument is required', $required->getName()));
             }
         }
 
         foreach ($arguments->getAllArguments() as $name => $value) {
-            if (!$this->validateArgument($name, $value, $command::getArguments())) {
-                throw new \LogicException(sprintf('Could not resolve %s argument', $name));
-            }
+            $this->validateArgument($name, $value, $command::getArguments());
         }
 
         return $arguments;
@@ -38,16 +36,17 @@ class InputResolver implements InputResolverInterface
         if (!$this->validateType($value, $bag->get($name))) {
             $type = $bag->get($name)->getType();
 
+            /** @phpstan-ignore-next-line */
             throw new \InvalidArgumentException(sprintf('The %s option only supports %s type', $name, $type->value));
         }
 
-        return TRUE;
+        return true;
     }
 
     private function validateType(mixed $value, ArgumentDefinition $definition): bool
     {
         if (null == $definition->getType()) {
-            return TRUE;
+            return true;
         }
 
         switch ($definition->getType()) {
@@ -60,7 +59,7 @@ class InputResolver implements InputResolverInterface
             case ArgumentType::BOOLEAN:
                 return is_bool($value);
             default:
-                return FALSE;
+                return false;
         }
     }
 }

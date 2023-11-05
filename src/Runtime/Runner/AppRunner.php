@@ -12,7 +12,7 @@ class AppRunner implements RunnerInterface
 
     public function run(?array $args = null): void
     {
-        if (null === $args){
+        if (null === $args) {
             $args = $_SERVER['argv'];
             array_shift($args);
         }

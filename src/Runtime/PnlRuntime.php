@@ -56,7 +56,7 @@ class PnlRuntime implements RuntimeInterface
 
     private function resolveArg(\ReflectionParameter $parameter): mixed
     {
-        $type = $parameter->getType()?->getName();
+        $type = $parameter->getType();
 
         if (null === $type) {
             throw new \InvalidArgumentException(\sprintf('Cannot resolve $%s', $parameter->getName()));
@@ -74,7 +74,8 @@ class PnlRuntime implements RuntimeInterface
                     return $this->additionals[$parameter->getType()->getName()];
                 };
 
-                throw new \InvalidArgumentException(sprintf('Cannot resolve %s', $parameter->getName()));
         };
+
+        throw new \InvalidArgumentException(sprintf('Cannot resolve %s', $parameter->getName()));
     }
 }

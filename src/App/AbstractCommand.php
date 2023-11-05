@@ -6,7 +6,7 @@ use Pnl\Console\Input\ArgumentBag;
 
 abstract class AbstractCommand implements CommandInterface
 {
-    private const NAME = '';
+    protected const NAME = '';
 
     public static function getArguments(): ArgumentBag
     {

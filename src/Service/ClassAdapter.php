@@ -10,13 +10,13 @@ class ClassAdapter implements ClassAdapterInterface
     /** @var string[] */
     private array $adaptedNamespaces = [];
 
-    /** @var \ReflectionClass */
+    /** @var \ReflectionClass[] */
     private array $reflectionList = [];
 
     public function adapt(string $namespace): bool
     {
         if ($this->isAdapted($namespace)) {
-            return TRUE;
+            return true;
         }
 
         if (!class_exists($namespace)) {
@@ -26,7 +26,7 @@ class ClassAdapter implements ClassAdapterInterface
         $this->doReflect($namespace);
         $this->adaptedNamespaces[] = $namespace;
 
-        return TRUE;
+        return true;
     }
 
     public function adaptAll(array $namespaces): bool
@@ -35,7 +35,7 @@ class ClassAdapter implements ClassAdapterInterface
             $this->adapt($namespace);
         }
 
-        return TRUE;
+        return true;
     }
 
     private function isAdapted(string $namespace): bool
@@ -50,5 +50,10 @@ class ClassAdapter implements ClassAdapterInterface
         } catch (\ReflectionException $e) {
             throw new FailLoadClass($e->getMessage());
         }
+    }
+
+    public function getReflections(): array
+    {
+        return $this->reflectionList;
     }
 }

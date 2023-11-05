@@ -13,12 +13,19 @@ class FileInstanciator implements FileInstanciatorInterface
         return new File(...$this->parsePath($path));
     }
 
-    private function parsePath(string $paht): array
+    /**
+     * @return array{
+     *    path: string,
+     *    filename: string,
+     *    extension: string
+     * }
+     */
+    private function parsePath(string $path): array
     {
         return [
-            "path" => \pathinfo($paht, PATHINFO_DIRNAME),
-            "filename" => \pathinfo($paht, PATHINFO_FILENAME),
-            "extension" => \pathinfo($paht, PATHINFO_EXTENSION),
+            "path" => \pathinfo($path, PATHINFO_DIRNAME),
+            "filename" => \pathinfo($path, PATHINFO_FILENAME),
+            "extension" => \pathinfo($path, PATHINFO_EXTENSION),
         ];
     }
 }

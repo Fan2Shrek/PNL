@@ -6,12 +6,11 @@ class ArgumentDefinition
 {
     public function __construct(
         private string $name,
-        private bool $required = FALSE,
+        private bool $required = false,
         private ?string $description = null,
         private ?ArgumentType $type = null,
         private mixed $default = null,
-    )
-    {
+    ) {
     }
 
     public function getName(): string
@@ -31,7 +30,7 @@ class ArgumentDefinition
         return $this;
     }
 
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }

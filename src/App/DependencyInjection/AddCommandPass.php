@@ -28,6 +28,7 @@ class AddCommandPass implements CompilerPassInterface
                         if ($reflection->implementsInterface(CommandInterface::class)) {
                             $serviceDefinition->addTag('command');
 
+                            /** @phpstan-ignore-next-line */
                             $this->application->addCommand($container->get($service));
                         }
                     }

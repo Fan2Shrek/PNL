@@ -4,9 +4,12 @@ namespace Pnl\Console\Input;
 
 class Input implements InputInterface
 {
-    /** @var array<string mixed>> */
+    /** @var array<string, mixed>> */
     private array $argumentsList = [];
 
+    /**
+     * @param array<string, mixed> $args
+    */
     public function __construct(array $args = [])
     {
         if (empty($args)) {
@@ -18,7 +21,7 @@ class Input implements InputInterface
 
     public function __get(string $name): mixed
     {
-        if ($this->hasArgument($name)){
+        if ($this->hasArgument($name)) {
             return $this->argumentsList[$name];
         }
 
@@ -35,6 +38,11 @@ class Input implements InputInterface
         return isset($this->argumentsList[$name]);
     }
 
+    /**
+     * @param array<string> $args
+     *
+     * @return array<string, mixed>
+    */
     private function parseArguments(array $args): array
     {
         $arguments = [];
@@ -49,7 +57,7 @@ class Input implements InputInterface
             } elseif (str_starts_with($value, '--')) {
                 preg_match('/--(.*)/', $value, $matches);
 
-                $arguments[$matches[1]] = TRUE;
+                $arguments[$matches[1]] = true;
             }
         }
 

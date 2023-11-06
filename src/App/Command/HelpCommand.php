@@ -9,6 +9,7 @@ use Pnl\Console\Output\ANSI\TextColors;
 use Pnl\Console\Output\OutputInterface;
 use Pnl\Console\Output\ANSI\BackgroundColor;
 use Pnl\Console\Output\ANSI\Style as ANSIStyle;
+use Pnl\Console\Output\Style\CustomeStyle;
 
 class HelpCommand extends AbstractCommand
 {
@@ -21,13 +22,23 @@ class HelpCommand extends AbstractCommand
 
     public function __invoke(InputInterface $input, OutputInterface $output): void
     {
-        $style = new Style($output);
+        $style = new CustomeStyle($output);
 
-        $style->setColor(TextColors::BLACK)
-            ->setBackground(BackgroundColor::WHITE)
-            ->setStyle(ANSIStyle::ITALIC)
-            ->start();
+        $subtitleStyle = new Style($output);
+        $subtitleStyle->setColor(TextColors::GREEN)
+            ->setBackground(BackgroundColor::BLACK)
+            ->setStyle(ANSIStyle::ITALIC);
 
-        $style->write('Welcome to PNL Framework !');
+        $style->addStyle('subtitle', $subtitleStyle);
+
+        $basicStyle = new Style($output);
+        $basicStyle->setColor(TextColors::BLACK)
+            ->setBackground(BackgroundColor::WHITE);
+
+        $style->addStyle('basic', $basicStyle);
+
+        $style->writeWithStyle('Welcome to PNL Framework !', 'basic');
+        $style->newLine();
+        $style->writeWithStyle('Made By Fan2Shrek :)', 'subtitle');
     }
 }

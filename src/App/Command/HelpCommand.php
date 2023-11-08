@@ -9,7 +9,7 @@ use Pnl\Console\Output\ANSI\TextColors;
 use Pnl\Console\Output\OutputInterface;
 use Pnl\Console\Output\ANSI\BackgroundColor;
 use Pnl\Console\Output\ANSI\Style as ANSIStyle;
-use Pnl\Console\Output\Style\CustomeStyle;
+use Pnl\Console\Output\Style\CustomStyle;
 
 class HelpCommand extends AbstractCommand
 {
@@ -22,23 +22,27 @@ class HelpCommand extends AbstractCommand
 
     public function __invoke(InputInterface $input, OutputInterface $output): void
     {
-        $style = new CustomeStyle($output);
+        $style = new CustomStyle($output);
 
-        $subtitleStyle = new Style($output);
-        $subtitleStyle->setColor(TextColors::GREEN)
+        $style->createStyle('subtitle')
+        ->setColor(TextColors::GREEN)
             ->setBackground(BackgroundColor::BLACK)
             ->setStyle(ANSIStyle::ITALIC);
 
-        $style->addStyle('subtitle', $subtitleStyle);
-
-        $basicStyle = new Style($output);
-        $basicStyle->setColor(TextColors::BLACK)
+        $style->createStyle('basic')
+        ->setColor(TextColors::BLACK)
             ->setBackground(BackgroundColor::WHITE);
 
-        $style->addStyle('basic', $basicStyle);
+        $style->createStyle('footer')
+            ->setColor(TextColors::YELLOW)
+            ->setBackground(BackgroundColor::RED);
 
         $style->writeWithStyle('Welcome to PNL Framework !', 'basic');
         $style->newLine();
         $style->writeWithStyle('Made By Fan2Shrek :)', 'subtitle');
+        $style->writeln('Visit git@github.com:Fan2Shrek/PNL.git for more ');
+        $style->use('footer');
+        $style->writeln('Thank you for using PNL Framework !');
+        $style->end();
     }
 }

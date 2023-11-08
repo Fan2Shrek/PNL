@@ -24,6 +24,7 @@ abstract class AbstractStyle implements StyleInterface, OutputInterface
 
     public function writeln(string $message): void
     {
+        $this->start();
         $this->output->writeln($message);
     }
 

@@ -4,7 +4,7 @@ namespace Pnl\Console\Output\Style;
 
 use Pnl\Console\Output\Style\Style;
 
-class CustomeStyle extends AbstractStyle
+class CustomStyle extends AbstractStyle
 {
     /**
      * @var Style[]
@@ -45,20 +45,44 @@ class CustomeStyle extends AbstractStyle
 
     public function writeWithStyle(string $message, string $style = null): void
     {
-        if (null === $style) {
+        if (null === $style && null === $this->currentStyle) {
             $this->output->write($message);
 
             return;
         }
 
-        if (!$this->has($style)) {
-            throw new \Exception(sprintf('Style %s does not exists', $style));
-        }
-
-        if (null === $this->currentStyle || null !== $style) {
+        if (null !== $style) {
             $this->currentStyle = $this->get($style);
         }
 
         $this->currentStyle->write($message);
+    }
+
+    public function use(?string $name = null): static
+    {
+        $this->currentStyle = null !== $name ? $this->get($name) : null;
+
+        return $this;
+    }
+
+    public function createStyle(string $name): Style
+    {
+        $style = new Style($this->output);
+
+        $this->currentStyle = $style;
+        $this->addStyle($name, $style);
+
+        return $style;
+    }
+
+    public function writeln(string $message): void
+    {
+        $this->currentStyle->start();
+        $this->currentStyle->writeln($message);
+    }
+
+    public function write(string $message, bool $newline = false): void
+    {
+        $this->currentStyle->write($message, $newline);
     }
 }

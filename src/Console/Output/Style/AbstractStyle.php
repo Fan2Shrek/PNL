@@ -9,9 +9,9 @@ use Pnl\Console\Output\ANSI\BackgroundColor;
 
 abstract class AbstractStyle implements StyleInterface, OutputInterface
 {
-    protected TextColors $color = TextColors::RESET;
+    protected TextColors $color = TextColors::WHITE;
 
-    protected BackgroundColor $background = BackgroundColor::RESET;
+    protected BackgroundColor $background = BackgroundColor::BLACK;
 
     protected Style $style = Style::RESET;
 
@@ -57,11 +57,11 @@ abstract class AbstractStyle implements StyleInterface, OutputInterface
 
     public function start(): void
     {
-        echo sprintf("\x1b[%s;%s;%sm", $this->style->value, $this->color->value, $this->background->value);
+        echo sprintf("\033[%s;%s;%sm", $this->style->value, $this->color->value, $this->background->value);
     }
 
     public function end(): void
     {
-        echo sprintf("\x1b[%s;%s;%sm", STYLE::RESET->value, TextColors::RESET->value, BackgroundColor::RESET->value);
+        echo sprintf("\033[%s;%s;%sm", STYLE::RESET->value, TextColors::RESET->value, BackgroundColor::RESET->value);
     }
 }

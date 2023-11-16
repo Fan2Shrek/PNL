@@ -2,6 +2,7 @@
 
 namespace Pnl;
 
+use Pnl\App\Exception\CommandNotFoundException;
 use Pnl\Console\Input\Input;
 use Pnl\Service\ClassAdapter;
 use Pnl\Composer\ComposerContext;
@@ -11,16 +12,14 @@ use Pnl\App\DependencyInjection\AddCommandPass;
 use Pnl\Console\Input\InputInterface;
 use Pnl\Console\InputResolver;
 use Pnl\Console\InputResolverInterface;
-use Pnl\Console\Output\OutputInterface;
 use Pnl\Console\Output\ConsoleOutput;
 use Symfony\Component\Config\FileLocator;
-use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 class Application
 {
-    private Container $container;
+    private ContainerBuilder $container;
 
     private ComposerContext $composerContext;
 
@@ -52,6 +51,7 @@ class Application
         }
 
         if (empty($args)) {
+            $this->executeCommand($this->getCommand('help'), new Input($args));
             return;
         }
 
@@ -59,9 +59,11 @@ class Application
             $name = $args[0];
             array_shift($args);
             $this->executeCommand($this->getCommand($name), new Input($args));
+
+            return;
         }
 
-        return;
+        throw new CommandNotFoundException(sprintf('Command %s not found', $args[0]));
     }
 
     private function boot(): void
@@ -78,6 +80,10 @@ class Application
             $this->initializeContainer();
         }
 
+        if (empty($this->commandList)) {
+            $this->registerCommands();
+        }
+
         $this->isBooted = true;
     }
 
@@ -85,17 +91,19 @@ class Application
     {
         $builder = new ContainerBuilder();
 
-        $builder->addObjectResource($this);
-
         $loader = new YamlFileLoader($builder, new FileLocator(__DIR__ . '/../config'));
         $loader->load('services.yaml');
-
-        //Add commands to compile
-        $builder->addCompilerPass(new AddCommandPass($this));
 
         $builder->compile();
 
         $this->container = $builder;
+    }
+
+    private function registerCommands(): void
+    {
+        foreach ($this->container->findTaggedServiceIds('command') as $key => $command) {
+            $this->addCommand($this->container->get($key));
+        }
     }
 
     public function executeCommand(CommandInterface $command, InputInterface $input): void

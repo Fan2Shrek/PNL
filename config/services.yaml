@@ -6,6 +6,7 @@ services:
 
     Pnl\App\Command\:
         resource: '../src/App/Command'
+        tags: ['command']
 
     Pnl\Console\:
         resource: '../src/Console'

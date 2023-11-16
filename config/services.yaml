@@ -6,6 +6,11 @@ services:
 
     Pnl\App\Command\:
         resource: '../src/App/Command'
+
+    Pnl\App\Command\HelpCommand:
+        class: 'Pnl\App\Command\HelpCommand'
+        arguments:
+            - '@service_container'
         tags: ['command']
 
     Pnl\Console\:

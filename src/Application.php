@@ -9,6 +9,7 @@ use Pnl\Composer\ComposerContext;
 use Composer\Autoload\ClassLoader;
 use Pnl\App\CommandInterface;
 use Pnl\App\DependencyInjection\AddCommandPass;
+use Pnl\App\DependencyInjection\CommandCompiler;
 use Pnl\Console\Input\InputInterface;
 use Pnl\Console\InputResolver;
 use Pnl\Console\InputResolverInterface;
@@ -52,6 +53,7 @@ class Application
 
         if (empty($args)) {
             $this->executeCommand($this->getCommand('help'), new Input($args));
+
             return;
         }
 
@@ -93,6 +95,8 @@ class Application
 
         $loader = new YamlFileLoader($builder, new FileLocator(__DIR__ . '/../config'));
         $loader->load('services.yaml');
+
+        $builder->addCompilerPass(new CommandCompiler());
 
         $builder->compile();
 

@@ -2,11 +2,12 @@
 
 namespace Pnl\App\Command;
 
-use Pnl\App\AbstractCommand;
 use Pnl\Application;
+use Pnl\App\AbstractCommand;
+use Pnl\App\CommandInterface;
+use Pnl\Service\ClassAdapter;
 use \Pnl\Console\Input\InputInterface;
 use \Pnl\Console\Output\OutputInterface;
-use Pnl\Service\ClassAdapter;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -14,8 +15,18 @@ final class HelpCommand extends AbstractCommand
 {
     protected const NAME = 'help';
 
-    public function __construct(private ClassAdapter $application)
+    /**
+     * @var CommandInterface[]
+     */
+    private array $commandList = [];
+
+    public function __construct(ContainerBuilder $container)
     {
+        foreach ($container->findTaggedServiceIds('command') as $key => $command) {
+            if ($key !== self::class) {
+                $this->commandList[] = $container->get($key);
+            }
+        }
     }
 
     public function getDescription(): string
@@ -25,6 +36,6 @@ final class HelpCommand extends AbstractCommand
 
     public function __invoke(InputInterface $input, OutputInterface $output): void
     {
-        dd($this->application);
+        dd($this->commandList);
     }
 }

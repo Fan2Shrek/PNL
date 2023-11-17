@@ -9,9 +9,9 @@ use Pnl\Console\Output\ANSI\BackgroundColor;
 
 abstract class AbstractStyle implements StyleInterface, OutputInterface
 {
-    protected TextColors $color = TextColors::WHITE;
+    protected TextColors $color = TextColors::DEFAULT;
 
-    protected BackgroundColor $background = BackgroundColor::BLACK;
+    protected BackgroundColor $background = BackgroundColor::DEFAULT;
 
     protected Style $style = Style::RESET;
 

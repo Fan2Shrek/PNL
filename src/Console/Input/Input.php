@@ -7,15 +7,13 @@ class Input implements InputInterface
     /** @var array<string, mixed>> */
     private array $argumentsList = [];
 
+    private mixed $nameless = null;
+
     /**
      * @param array<string, mixed> $args
     */
     public function __construct(array $args = [])
     {
-        if (empty($args)) {
-            $args = $_SERVER['argv'];
-        }
-
         $this->argumentsList = $this->parseArguments($args);
     }
 
@@ -26,6 +24,16 @@ class Input implements InputInterface
         }
 
         return null;
+    }
+
+    public function getNameless(): mixed
+    {
+        return $this->nameless;
+    }
+
+    public function haveNameless(): bool
+    {
+        return null !== $this->nameless;
     }
 
     public function getAllArguments(): array
@@ -58,6 +66,8 @@ class Input implements InputInterface
                 preg_match('/--(.*)/', $value, $matches);
 
                 $arguments[$matches[1]] = true;
+            } else {
+                $this->nameless = $value;
             }
         }
 

@@ -13,7 +13,7 @@ class InputResolver implements InputResolverInterface
     public function resolve(CommandInterface $command, InputInterface $arguments): InputInterface
     {
         foreach ($command::getArguments()->getAllRequire() as $required) {
-            if (!$arguments->getAllArguments()) {
+            if (!$arguments->hasArgument($required->getName())) {
                 throw new \Exception(sprintf('The %s argument is required', $required->getName()));
             }
         }

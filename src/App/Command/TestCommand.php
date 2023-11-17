@@ -20,7 +20,7 @@ class TestCommand extends AbstractCommand
     {
         return (new ArgumentBag())
             ->add('john', true, 'Test argument', ArgumentType::STRING)
-            ->add('joe', false, 'Test argument 2', ArgumentType::BOOLEAN, true);
+            ->add('joe', true, 'Test argument 2', ArgumentType::BOOLEAN, true);
     }
 
     public function getDescription(): string

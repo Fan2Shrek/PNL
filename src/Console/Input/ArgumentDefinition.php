@@ -10,6 +10,7 @@ class ArgumentDefinition
         private ?string $description = null,
         private ?ArgumentType $type = null,
         private mixed $default = null,
+        private bool $nameless = false,
     ) {
     }
 
@@ -55,6 +56,18 @@ class ArgumentDefinition
     public function setType(?ArgumentType $type): static
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function isNameless(): bool
+    {
+        return $this->nameless;
+    }
+
+    public function setNameless(bool $nameless): static
+    {
+        $this->nameless = $nameless;
 
         return $this;
     }
